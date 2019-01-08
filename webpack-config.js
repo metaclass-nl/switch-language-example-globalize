@@ -13,20 +13,24 @@ function subLocaleNames( name ) {
 
 module.exports = {
 	entry: {
-		main: "./app/index.js",
+		main: "./src/index.js",
 	},
 	output: {
 		path: path.join( __dirname, production ? "./dist" : "./tmp" ),
-		publicPath: production ? "" : "http://localhost:8080/",
+		publicPath: production ? "" : "http://localhost:9000/",
 		chunkFilename: "[name].[chunkhash].js",
-		filename: production ? "[name].[chunkhash].js" : "app.js"
+		filename: production ? "[name].[chunkhash].js" : "[name].js"
 	},
 	resolve: {
 		extensions: [ "*", ".js" ]
 	},
+    devServer: {
+        port: 9000,
+        open: true
+    },
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: "./index-template.html",
+			template: "./public/index-template.html",
 			// filter to a single compiled globalize language
 			// change 'en' to language of choice or remove inject all languages
 			// NOTE: last language will be set language
@@ -39,21 +43,21 @@ module.exports = {
 			},
 		}),
 		new GlobalizePlugin({
-			production: production,
+			production: true,
 			developmentLocale: "en",
 			supportedLocales: [ "ar", "de", "en", "es", "pt", "ru", "zh" ],
 			messages: "messages/[locale].json",
 			output: "i18n/[locale].[chunkhash].js"
-		})
-	].concat( production ? [
-		new CommonsChunkPlugin({
-			name: "vendor",
-			minChunks: function(module) {
-				return (
-					module.context && module.context.indexOf("node_modules") !== -1
-				);
-			}
 		}),
+        new CommonsChunkPlugin({
+            name: "vendor",
+            minChunks: function(module) {
+                return (
+                    module.context && module.context.indexOf("node_modules") !== -1
+                );
+            }
+        })
+	].concat( production ? [
 		new webpack.optimize.UglifyJsPlugin({
 			compress: {
 				warnings: false
