@@ -11,7 +11,11 @@
   },
   "scripts": {
     "start": "webpack-dev-server --config webpack-config.js --hot --progress --colors --inline",
-    "build": "NODE_ENV=production webpack --config webpack-config.js"
+    "build": "NODE_ENV=production webpack --config webpack-config.js",
+    "test": "jest"
   },
-  "cldr-data-urls-filter": "(core|dates|numbers|units)"
+  "cldr-data-urls-filter": "(core|dates|numbers|units)",
+  "dependencies": {
+    "jest": "^23.6.0"
+  }
 }
