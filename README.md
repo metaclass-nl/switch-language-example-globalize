@@ -52,9 +52,9 @@ npm run build
 ```
 
 1. Generate the compiled bundles by running `npm run build`, which will be
-created at `./dist`. Note that all the production code is already minified using UglifyJS. 
+created at `./build`. Note that all the production code is already minified using UglifyJS. 
 See `package.json` to understand the actual shell command that is used.
-1. Point your browser at `./dist/index.html` to run the application using the
+1. Point your browser at `./build/index.html` to run the application using the
 generated production files. Edit this file to display the application using a
 different locale (source code has instructions).
 

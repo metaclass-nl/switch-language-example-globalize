@@ -16,7 +16,7 @@ module.exports = {
 		main: "./src/index.js",
 	},
 	output: {
-		path: path.join( __dirname, production ? "./dist" : "./tmp" ),
+		path: path.join( __dirname, production ? "./build" : "./tmp" ),
 		publicPath: production ? "" : "http://localhost:9000/",
 		chunkFilename: "[name].[chunkhash].js",
 		filename: production ? "[name].[chunkhash].js" : "[name].js"
