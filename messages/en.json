@@ -16,6 +16,9 @@
 			"    one {You have one remaining task}",
 			"  other {You have # remaining tasks}",
 			"}."
-		]
+		],
+
+		"message-current-locale": "Currently the locale is \"{locale}\"",
+		"message-change-locale": "Click a link to change the locale:"
 	}
 }

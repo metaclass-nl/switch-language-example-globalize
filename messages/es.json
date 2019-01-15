@@ -16,6 +16,9 @@
 			"    one {Tienes una tarea restante}",
 			"  other {Tienes # tareas restantes}",
 			"}."
-		]
+		],
+
+		"message-current-locale": "Currently the locale is \"{locale}\"",
+		"message-change-locale": "Click a link to change the locale:"
 	}
 }

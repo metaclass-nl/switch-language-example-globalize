@@ -20,6 +20,9 @@
 			"   many {لديك # من المهام المتبقية}",
 			"  other {لديك # من المهام المتبقية}",
 			"}."
-		]
+		],
+
+		"message-current-locale": "Currently the locale is \"{locale}\"",
+		"message-change-locale": "Click a link to change the locale:"
 	}
 }

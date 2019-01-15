@@ -18,6 +18,9 @@
 			"   few {У вас осталось # задачи}",
 			"   other {У вас осталось # задачи}",
 			"}."
-		]
+		],
+
+		"message-current-locale": "Currently the locale is \"{locale}\"",
+		"message-change-locale": "Click a link to change the locale:"
 	}
 }

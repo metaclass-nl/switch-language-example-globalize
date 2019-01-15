@@ -1,22 +1,32 @@
+/** In order to simplify removing this demo code this
+ * class has not been refactored into SOLID components.
+ */
+
 import React, { Component } from 'react';
 
 import Globalize from "globalize";
+const globalizeChunkPrefix = 'globalize-compiled-data-';
 
-// Formatters
-var numberFormatter = Globalize.numberFormatter({ maximumFractionDigits: 2 });
-var numberCompactFormatter = Globalize.numberFormatter({
+// Formatters - usually placed in a seperate file and exported from there so
+// that they can be imported anywhere in the application
+//
+// LIMITATION of Globalize Webpack Plugin: formatters must be configured with
+// literal expressions. Using constants or variables will not work!
+
+const numberFormatter = Globalize.numberFormatter({ maximumFractionDigits: 2 });
+const numberCompactFormatter = Globalize.numberFormatter({
     compact: "short",
     minimumSignificantDigits: 1,
     maximumSignificantDigits: 3
 });
-var currencyFormatter = Globalize.currencyFormatter( "USD" );
-var dateFormatter = Globalize.dateFormatter({ datetime: "medium" });
-var dateWithTimeZoneFormatter = Globalize.dateFormatter({
+const currencyFormatter = Globalize.currencyFormatter( "USD" );
+const dateFormatter = Globalize.dateFormatter({ datetime: "medium" });
+const dateWithTimeZoneFormatter = Globalize.dateFormatter({
     datetime: "full",
     timeZone: "America/Sao_Paulo"
 });
-var _dateToPartsFormatter = Globalize.dateToPartsFormatter({ datetime: "medium" });
-var dateToPartsFormatter = function( value ) {
+const _dateToPartsFormatter = Globalize.dateToPartsFormatter({ datetime: "medium" });
+const dateToPartsFormatter = function( value ) {
     return _dateToPartsFormatter( value, {
         datetime: "medium"
     }).map(function( part ) {
@@ -28,14 +38,16 @@ var dateToPartsFormatter = function( value ) {
         return memo + value;
     });
 };
-var relativeTimeFormatter = Globalize.relativeTimeFormatter( "second" );
-var unitFormatter = Globalize.unitFormatter( "mile/hour", { form: "short" } );
+const relativeTimeFormatter = Globalize.relativeTimeFormatter( "second" );
+const unitFormatter = Globalize.unitFormatter( "mile/hour", { form: "short" } );
+
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.startTime = new Date();
-        this.state = {elapsedTime: 0};
+        this.state = {elapsedTime: 0, locale: 'en'};
+        this.loadManifest();
     }
 
     componentDidMount() {
@@ -50,18 +62,20 @@ class App extends Component {
     }
 
     tick() {
-        this.setState({elapsedTime: +( ( this.startTime - new Date() ) / 1000 ).toFixed( 0 )});
+        this.setState({
+            elapsedTime: +( ( this.startTime - new Date() ) / 1000 ).toFixed( 0 )
+        });
     }
 
     render() {
         // Messages.
         const message1 = Globalize.formatMessage( "message-1", {
-        currency: currencyFormatter( 69900 ),
-        date: dateFormatter( new Date() ),
-        number: numberFormatter( 12345.6789 ),
-        relativeTime: relativeTimeFormatter( this.state.elapsedTime ),
-        unit: unitFormatter( 60 )
-    });
+            currency: currencyFormatter( 69900 ),
+            date: dateFormatter( new Date() ),
+            number: numberFormatter( 12345.6789 ),
+            relativeTime: relativeTimeFormatter( this.state.elapsedTime ),
+            unit: unitFormatter( 60 )
+        });
 
         return <div id="demo">
             <h1>Globalize App example using Webpack (and React)</h1>
@@ -111,22 +125,71 @@ class App extends Component {
                     count: 3
                 })}
             </p>
+            <p>
+                { Globalize.formatMessage( "message-current-locale", {locale: this.state.locale}) }.
+            </p>
+            {this.renderSelectLocale()}
         </div>;
     }
+
+    // Normally the following would be in a seperate SelectLocale component
+
+    renderSelectLocale() {
+        if (this.state.manifest === undefined) {
+            return;
+        }
+        const links = [];
+        var chunk;
+        let comma = '';
+        for (chunk in this.state.manifest) {
+            if (chunk.startsWith(globalizeChunkPrefix)) {
+                let locale = chunk.substr(globalizeChunkPrefix.length, chunk.length - globalizeChunkPrefix.length - 3);
+                if (locale != this.state.locale) {
+                    links.push(<span key={locale}>{comma}<a href="#" onClick={this.changeLocale.bind(this)} id={locale}>{locale}</a></span>)
+                    let comma = ', ';
+                }
+            }
+        };
+        return <p>
+            { Globalize.formatMessage( "message-change-locale") }&nbsp;
+            {links}.
+        </p>
+    }
+
+    loadManifest() {
+        const that = this;
+        const fetchHeaders = new Headers({"accept": "application/json", 'X-Requested-With': 'XMLHttpRequest'});
+        fetch('manifest.json', { headers: fetchHeaders }).then(response => {
+            return response.json();
+        })
+            .then(
+                json => {
+                    that.setState({manifest: json});
+                });
+
+    }
+
+    changeLocale(e) {
+        // We could keep track of the chunks that are already loaded and not reload them,
+        // but the typical user only selects his locale once.
+        // Setting a locale cookie and auto select the locale from the cookie would make more sense.
+
+        e.preventDefault();
+        const chunk = globalizeChunkPrefix + e.target.id + '.js';
+
+        // Is there really no better way to dynamically load these chunks?
+        const el = document.createElement('script');
+        const onLoaded = this.chunkLoaded.bind(this, e.target.id);
+        el.onload = onLoaded;
+        el.onreadystatechange = onLoaded;
+        el.src = this.state.manifest[chunk];
+        document.body.appendChild(el);
+    }
+
+    chunkLoaded(locale) {
+        Globalize.locale(locale);
+        this.setState({locale: locale});
+    }
 }
-
-/*
-const fetchHeaders = new Headers({"accept": "application/json", 'X-Requested-With': 'XMLHttpRequest'});
-fetch('manifest.json', { headers: fetchHeaders }).then(response => {
-    return response.json();
-})
-    .then(
-        json => {
-//            alert(JSON.stringify(json));
-        });
-
-// require('i18n/de.js');
-// Globalize.setLocale('de');
-*/
 
 export default App;

@@ -5,6 +5,8 @@ It has been adapted to mimic the result of start-react-app but with
 support for Globalize.js and react.js so that it can be used with 
 api-platform client generator. 
 
+Furthermore it has been extended to allow the user to change the locale.
+
 This version uses Globalize runtime modules for both development and production.
 This is for two reasons:
 - In development mode Globalize Webpack Plugin includes all localization data for the
@@ -13,9 +15,13 @@ This is for two reasons:
   whick is too late and hard to debug.
 - In development mode Globalize Webpack Plugin only includes localization data for the
   development locale, so changing the locale a runtime will allways cause errors.
+
 The price you pay for using production mode is slower compilation, especially if you
 include many supportedLocales. But (re)loading in the browser will be faster 
 because of the bundles to be loaded will be much smaller.  
+
+Furthermore, if you change your messages or formatters you may need to stop and restart
+Webpack.
 
 ## Requirements
 
