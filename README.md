@@ -2,14 +2,10 @@
 
 This is a modified copy of examples/app-npm-webpack from globalize 1.4.0.
 It has been adapted to mimic the result of start-react-app but with
-support for Globalize.js so that api platform client generator can use it
-for generating a react client in. 
+support for Globalize.js and react.js so that it can be used with 
+api-platform client generator. 
 
-It focuses on the [Globalize Webpack Plugin][], which automates data loading
-(CLDR and app messages) during development and automates Globalize compilation. 
-It assumes knowledge of Globalize, npm, and Webpack usage basics.
-
-This version uses of Globalize runtime modules for both development and production.
+This version uses Globalize runtime modules for both development and production.
 This is for two reasons:
 - In development mode Globalize Webpack Plugin includes all localization data for the
   development locale. This does not only result in a big bundle, it also prevents
@@ -110,6 +106,9 @@ dynamically loaded. It means fast to load code (small code) and fast to run
 code.
 1. Understand the demo by reading the source code. We have comments there for
 you.
+
+Problem: it is not clear how to dynamcally load the required chunk for a locale
+(requires the chunkhash...) 
 
 For more information about the plugin, see the [Globalize Webpack Plugin][]
 documentation.

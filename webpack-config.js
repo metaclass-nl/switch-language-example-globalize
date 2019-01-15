@@ -3,6 +3,7 @@ var path = require("path");
 var CommonsChunkPlugin = require( "webpack/lib/optimize/CommonsChunkPlugin" );
 var HtmlWebpackPlugin = require( "html-webpack-plugin" );
 var GlobalizePlugin = require( "globalize-webpack-plugin" );
+var ManifestPlugin = require('webpack-manifest-plugin');
 
 var production = process.env.NODE_ENV === "production";
 var globalizeCompiledDataRegex = new RegExp( /^(globalize\-compiled\-data)\-\S+$/ );
@@ -24,6 +25,17 @@ module.exports = {
 	resolve: {
 		extensions: [ "*", ".js" ]
 	},
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader"
+                }
+            }
+        ]
+    },
     devServer: {
         port: 9000,
         open: true
@@ -45,7 +57,7 @@ module.exports = {
 		new GlobalizePlugin({
 			production: true,
 			developmentLocale: "en",
-			supportedLocales: [ "ar", "de", "en", "es", "pt", "ru", "zh" ],
+			supportedLocales: [ "ar", "en", "es", "pt", "ru", "zh", "de" ],
 			messages: "messages/[locale].json",
 			output: "i18n/[locale].[chunkhash].js"
 		}),
@@ -56,7 +68,8 @@ module.exports = {
                     module.context && module.context.indexOf("node_modules") !== -1
                 );
             }
-        })
+        }),
+        new ManifestPlugin({writeToFileEmit: true})
 	].concat( production ? [
 		new webpack.optimize.UglifyJsPlugin({
 			compress: {
