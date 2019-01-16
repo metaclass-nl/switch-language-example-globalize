@@ -15,9 +15,6 @@
 			"{count, plural,",
 			"  other {你有#剩下的任务}",
 			"}."
-		],
-
-		"message-current-locale": "Currently the locale is \"{locale}\"",
-		"message-change-locale": "Click a link to change the locale:"
+		]
 	}
 }

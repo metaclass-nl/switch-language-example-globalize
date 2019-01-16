@@ -16,9 +16,6 @@
 			"    one {Sie haben noch eine Aufgabe}",
 			"  other {Sie haben noch # verbliebende Aufgaben}",
 			"}."
-		],
-
-		"message-current-locale": "Currently the locale is \"{locale}\"",
-		"message-change-locale": "Click a link to change the locale:"
+		]
 	}
 }

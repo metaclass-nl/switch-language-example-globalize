@@ -7,46 +7,22 @@ import React, { Component } from 'react';
 import Globalize from "globalize";
 const globalizeChunkPrefix = 'globalize-compiled-data-';
 
-// Formatters - usually placed in a seperate file and exported from there so
-// that they can be imported anywhere in the application
-//
-// LIMITATION of Globalize Webpack Plugin: formatters must be configured with
-// literal expressions. Using constants or variables will not work!
-
-const numberFormatter = Globalize.numberFormatter({ maximumFractionDigits: 2 });
-const numberCompactFormatter = Globalize.numberFormatter({
-    compact: "short",
-    minimumSignificantDigits: 1,
-    maximumSignificantDigits: 3
-});
-const currencyFormatter = Globalize.currencyFormatter( "USD" );
-const dateFormatter = Globalize.dateFormatter({ datetime: "medium" });
-const dateWithTimeZoneFormatter = Globalize.dateFormatter({
-    datetime: "full",
-    timeZone: "America/Sao_Paulo"
-});
-const _dateToPartsFormatter = Globalize.dateToPartsFormatter({ datetime: "medium" });
-const dateToPartsFormatter = function( value ) {
-    return _dateToPartsFormatter( value, {
-        datetime: "medium"
-    }).map(function( part ) {
-        switch(part.type) {
-            case "month": return "<strong>" + part.value + "</strong>";
-            default: return part.value;
-        }
-    }).reduce(function( memo, value ) {
-        return memo + value;
-    });
-};
-const relativeTimeFormatter = Globalize.relativeTimeFormatter( "second" );
-const unitFormatter = Globalize.unitFormatter( "mile/hour", { form: "short" } );
-
+import 'react-widgets/dist/css/react-widgets.css';
+import NumberPicker from 'react-widgets/lib/NumberPicker';
+import DateTimePicker from 'react-widgets/lib/DateTimePicker';
+import DateConverters from "./converters/ReactWidgetsDate.js";
+import NumberConverters from "./converters/ReactWidgetsNumber.js";
+import globalizeLocalizer from "react-widgets-globalize";
+globalizeLocalizer();
 
 class App extends Component {
+
     constructor(props) {
         super(props);
         this.startTime = new Date();
         this.state = {elapsedTime: 0, locale: 'en'};
+        this.formatters = {};
+        this.initFormatters();
         this.loadManifest();
     }
 
@@ -67,14 +43,47 @@ class App extends Component {
         });
     }
 
+    initFormatters() {
+        // LIMITATION of Globalize Webpack Plugin: formatters must be configured with
+        // literal expressions. Using constants or variables will not work!
+        this.formatters.number = Globalize.numberFormatter({ maximumFractionDigits: 2 });
+        this.formatters.numberCompact = Globalize.numberFormatter({
+            compact: "short",
+            minimumSignificantDigits: 1,
+            maximumSignificantDigits: 3
+        });
+        this.formatters.currency = Globalize.currencyFormatter( "USD" );
+        this.formatters.date = Globalize.dateFormatter({ datetime: "medium" });
+        this.formatters.dateWithTimeZone = Globalize.dateFormatter({
+            datetime: "full",
+            timeZone: "America/Sao_Paulo"
+        });
+        const _dateToPartsFormatter = Globalize.dateToPartsFormatter({ datetime: "medium" });
+        this.formatters.dateToParts = function( value ) {
+            return _dateToPartsFormatter( value, {
+                datetime: "medium"
+            }).map(function( part ) {
+                switch(part.type) {
+                    case "month": return "<strong>" + part.value + "</strong>";
+                    default: return part.value;
+                }
+            }).reduce(function( memo, value ) {
+                return memo + value;
+            });
+        };
+        this.formatters.relativeTime = Globalize.relativeTimeFormatter( "second" );
+        this.formatters.unit = Globalize.unitFormatter( "mile/hour", { form: "short" } );
+
+    }
+
     render() {
         // Messages.
         const message1 = Globalize.formatMessage( "message-1", {
-            currency: currencyFormatter( 69900 ),
-            date: dateFormatter( new Date() ),
-            number: numberFormatter( 12345.6789 ),
-            relativeTime: relativeTimeFormatter( this.state.elapsedTime ),
-            unit: unitFormatter( 60 )
+            currency: this.formatters.currency( 69900 ),
+            date: this.formatters.date( new Date() ),
+            number: this.formatters.number( 12345.6789 ),
+            relativeTime: this.formatters.relativeTime( this.state.elapsedTime ),
+            unit: this.formatters.unit( 60 )
         });
 
         return <div id="demo">
@@ -85,35 +94,35 @@ class App extends Component {
                 <tbody>
                 <tr>
                     <td><span id="number-label">{Globalize.formatMessage( "number-label" )}</span></td>
-                    <td>"<span id="number">{numberFormatter( 12345.6789 )}</span>"</td>
+                    <td>"<span id="number">{this.formatters.number( 12345.6789 )}</span>"</td>
                 </tr>
                 <tr>
                     <td><span id="number-compact-label">{Globalize.formatMessage( "number-compact-label" )}</span></td>
-                    <td>"<span id="number-compact">{numberCompactFormatter( 12345.6789 )}</span>"</td>
+                    <td>"<span id="number-compact">{this.formatters.numberCompact( 12345.6789 )}</span>"</td>
                 </tr>
                 <tr>
                     <td><span id="currency-label">{Globalize.formatMessage( "currency-label" )}</span></td>
-                    <td>"<span id="currency">{currencyFormatter( 69900 )}</span>"</td>
+                    <td>"<span id="currency">{this.formatters.currency( 69900 )}</span>"</td>
                 </tr>
                 <tr>
                     <td><span id="date-label">{Globalize.formatMessage( "date-label" )}</span></td>
-                    <td>"<span id="date">{dateFormatter( new Date() )}</span>"</td>
+                    <td>"<span id="date">{this.formatters.date( new Date() )}</span>"</td>
                 </tr>
                 <tr>
                     <td><span id="date-time-zone-label">{Globalize.formatMessage( "date-time-zone-label" )}</span></td>
-                    <td>"<span id="date-time-zone">{dateWithTimeZoneFormatter( new Date() )}</span>"</td>
+                    <td>"<span id="date-time-zone">{this.formatters.dateWithTimeZone( new Date() )}</span>"</td>
                 </tr>
                 <tr>
                     <td><span id="date-to-parts-label">{Globalize.formatMessage( "date-to-parts-label" )}</span></td>
-                    <td>"<span id="date-to-parts">{dateToPartsFormatter( new Date() )}</span>"</td>
+                    <td>"<span id="date-to-parts">{this.formatters.dateToParts( new Date() )}</span>"</td>
                 </tr>
                 <tr>
                     <td><span id="relative-time-label">{Globalize.formatMessage( "relative-time-label" )}</span></td>
-                    <td>"<span id="relative-time">{relativeTimeFormatter( this.state.elapsedTime )}</span>"</td>
+                    <td>"<span id="relative-time">{this.formatters.relativeTime( this.state.elapsedTime )}</span>"</td>
                 </tr>
                 <tr>
                     <td><span id="unit-label">{Globalize.formatMessage( "unit-label" )}</span></td>
-                    <td>"<span id="unit">{unitFormatter( 60 )}</span>"</td>
+                    <td>"<span id="unit">{this.formatters.unit( 60 )}</span>"</td>
                 </tr>
                 </tbody>
             </table>
@@ -125,11 +134,51 @@ class App extends Component {
                     count: 3
                 })}
             </p>
-            <p>
-                { Globalize.formatMessage( "message-current-locale", {locale: this.state.locale}) }.
-            </p>
-            {this.renderSelectLocale()}
+            <table border="1" style={{marginBottom: "1em"}}>
+                <tbody>
+                    <tr>
+                        <td>DateTimePicker</td>
+                        <td><DateTimePicker
+                                name="when"
+                                format={DateConverters.defaultDateFormatter()}
+                                parse={DateConverters.defaultDateParser()}
+                                placeholder="When"
+                                onChange={this.whenChanged.bind(this)}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>NumberPicker</td>
+                        <td><NumberPicker
+                                name="score"
+                                step={1}
+                                format={NumberConverters.defaultNumberFormatter()}
+                                parse={NumberConverters.defaultNumberParser()}
+                                placeholder="Score"
+                                onChange={this.scoreChanged.bind(this)}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Current locale</td>
+                        <td>"{this.state.locale}"</td>
+                    </tr>
+                    <tr>
+                        <td>Click a link to change the locale</td>
+                        <td>{this.renderSelectLocale()}</td>
+                    </tr>
+
+                </tbody>
+            </table>
         </div>;
+    }
+
+    whenChanged(value) {
+        console.log('When has changed to '+ value);
+    }
+
+    scoreChanged(value) {
+        console.log('Score has changed to '+ value);
     }
 
     // Normally the following would be in a seperate SelectLocale component
@@ -150,10 +199,7 @@ class App extends Component {
                 }
             }
         };
-        return <p>
-            { Globalize.formatMessage( "message-change-locale") }&nbsp;
-            {links}.
-        </p>
+        return links;
     }
 
     loadManifest() {
@@ -189,6 +235,7 @@ class App extends Component {
     chunkLoaded(locale) {
         Globalize.locale(locale);
         this.setState({locale: locale});
+        this.initFormatters();
     }
 }
 

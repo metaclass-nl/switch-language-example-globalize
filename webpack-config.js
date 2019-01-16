@@ -33,7 +33,13 @@ module.exports = {
                 use: {
                     loader: "babel-loader"
                 }
-            }
+            },
+            { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+            // images and fonts
+            {
+                test: /\.(gif|ttf|eot|svg|woff2?)$/,
+                use: 'url-loader?name=[name].[ext]',
+            },
         ]
     },
     devServer: {
