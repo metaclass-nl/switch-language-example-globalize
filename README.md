@@ -1,10 +1,12 @@
-# Globalize react (react-witgets) example
+# Switch language example with globalize.js and react-widgets 
 
-This is a modified copy of examples/app-npm-webpack from globalize 1.4.0.
-It has been adapted to mimic the result of start-react-app but with
+This is a modified version of examples/app-npm-webpack from globalize 1.4.0.
+It has been adapted for compatibility with start-react-app but with
 support for Globalize.js and react-widgets. 
 
 Furthermore it has been extended to allow the user to change the locale.
+
+This version is under development. 
 
 ## Requirements
 

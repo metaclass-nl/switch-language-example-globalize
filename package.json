@@ -1,5 +1,27 @@
 {
-  "private": true,
+  "name": "switch-language-example-globalize",
+  "description": "An example of dynamically switching language using globalize.js and react-widgets aiming to be compatible with start-react-app.",
+  "keywords": [
+    "globalization",
+    "internationalization",
+    "multilingualization",
+    "localization",
+    "i18n",
+    "localize",
+    "react",
+    "react-widgets",
+    "date picker",
+    "date input",
+    "number picker",
+    "number input",
+    "webpack",
+    "start-react-app"
+  ],
+  "homepage": "https://github.com/metaclass-nl/switch-language-example-globalize",
+  "author": {
+    "name": "MetaClass",
+    "url": "https://www.metaclass.nl/"
+  },
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.0.0",
