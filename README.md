@@ -54,9 +54,8 @@ different locale (source code has instructions).
 
 ### Limitations
 
-Uses webpack-dev-server for development, which has a security issues. Keep
-'npm start' behind a firewall that only allows local access from the same machine!
-
+- Uses webpack-dev-server for development, which has a security issues. **Keep
+'npm start' behind a firewall that only allows local access from the same machine!**
 - If Globalize.js does not have a required number formatter (for the specified format and locale) 
   you may get the following error:
   TypeError: Globalize\[runtimeKey\] is undefined
