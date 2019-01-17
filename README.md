@@ -10,7 +10,14 @@ This version is under development.
 
 ## Requirements
 
-**1. Install app development dependencies**
+**1. Install the app**
+
+```
+git clone https://github.com/metaclass-nl/switch-language-example-globalize.git
+```
+Or download the zip file from github and extract all.
+
+**2. Install app development dependencies**
 
 This example uses `npm` to download the app development dependencies (i.e.,
 Globalize, CLDR data, Cldrjs, Webpack, [Globalize Webpack Plugin][], and
@@ -44,6 +51,26 @@ See `package.json` to understand the actual shell command that is used.
 1. Point your browser at `./build/index.html` to run the application using the
 generated production files. Edit this file to display the application using a
 different locale (source code has instructions).
+
+### Limitations
+
+Uses webpack-dev-server for development, which has a security issues. Keep
+'npm start' behind a firewall that only allows local access from the same machine!
+
+- If Globalize.js does not have a required number formatter (for the specified format and locale) 
+  you may get the following error:
+  TypeError: Globalize\[runtimeKey\] is undefined
+- If Globalize.js does not have a required date formatter (for the specified format and locale) 
+  you may get the following error: TypeError: locale(...).formatDate is not a function
+To prevent these errors: 
+- Don't use formats on react widgets that you did not include formatters and parsers for. 
+  The formatters and parsers supplied in src/converters are only those used by default
+  by react widgets. If you need other formats you need to define more formatter and parser
+  functions and include the file you defined them in so that Globalize Webpack Plugin will
+  precompile them and include them in each of the locale chunks.
+- Don't use locales whose chunk with cldr data, formatters and parsers are not loaded. 
+  Either include them through a script tag in you single html page or include them dynamically like 
+  App.changeLocale does. The names of the files are in manifest.json
 
 ## Globalize Webpack Plugin modes
 
