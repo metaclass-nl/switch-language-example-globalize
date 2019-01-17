@@ -62,6 +62,7 @@ Uses webpack-dev-server for development, which has a security issues. Keep
   TypeError: Globalize\[runtimeKey\] is undefined
 - If Globalize.js does not have a required date formatter (for the specified format and locale) 
   you may get the following error: TypeError: locale(...).formatDate is not a function
+
 To prevent these errors: 
 - Don't use formats on react widgets that you did not include formatters and parsers for. 
   The formatters and parsers supplied in src/converters are only those used by default
