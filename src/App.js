@@ -5,7 +5,7 @@
 import React, { Component } from 'react';
 
 import Globalize from "globalize";
-const globalizeChunkPrefix = 'globalize-compiled-data-';
+import LocaleChunkLoader, {globalizeChunkPrefix} from './globalizeWebpackPlugin/LocaleChunkLoader.js'
 
 import 'react-widgets/dist/css/react-widgets.css';
 import NumberPicker from 'react-widgets/lib/NumberPicker';
@@ -15,18 +15,21 @@ import NumberConverters from "./reactWidgets/NumberConverters.js";
 import globalizeLocalizer from "react-widgets-globalize";
 globalizeLocalizer();
 
+const initialLocale = 'en';
+
 class App extends Component {
 
     constructor(props) {
         super(props);
         this.startTime = new Date();
-        this.state = {elapsedTime: 0, locale: 'en'};
+        this.state = {elapsedTime: 0, locale: initialLocale};
         this.formatters = {};
         this.initFormatters();
-        this.loadManifest();
+        this.localeChunkLoader = new LocaleChunkLoader(this.chunkLoaded.bind(this), this.manifestLoaded.bind(this))
     }
 
     componentDidMount() {
+        this.localeChunkLoader.loadManifest();
         this.timerId = setInterval(
             () => this.tick(),
             1000
@@ -170,7 +173,8 @@ class App extends Component {
 
                 </tbody>
             </table>
-        </div>;
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        </div>
     }
 
     whenChanged(value) {
@@ -181,7 +185,9 @@ class App extends Component {
         console.log('Score has changed to '+ value);
     }
 
-    // Normally the following would be in a seperate SelectLocale component
+    manifestLoaded(manifest) {
+        this.setState({manifest: manifest});
+    }
 
     renderSelectLocale() {
         if (this.state.manifest === undefined) {
@@ -202,34 +208,8 @@ class App extends Component {
         return links;
     }
 
-    loadManifest() {
-        const that = this;
-        const fetchHeaders = new Headers({"accept": "application/json", 'X-Requested-With': 'XMLHttpRequest'});
-        fetch('manifest.json', { headers: fetchHeaders }).then(response => {
-            return response.json();
-        })
-            .then(
-                json => {
-                    that.setState({manifest: json});
-                });
-
-    }
-
     changeLocale(e) {
-        // We could keep track of the chunks that are already loaded and not reload them,
-        // but the typical user only selects his locale once.
-        // Setting a locale cookie and auto select the locale from the cookie would make more sense.
-
-        e.preventDefault();
-        const chunk = globalizeChunkPrefix + e.target.id + '.js';
-
-        // Is there really no better way to dynamically load these chunks?
-        const el = document.createElement('script');
-        const onLoaded = this.chunkLoaded.bind(this, e.target.id);
-        el.onload = onLoaded;
-        el.onreadystatechange = onLoaded;
-        el.src = this.state.manifest[chunk];
-        document.body.appendChild(el);
+        this.localeChunkLoader.loadChunkFor(e.target.id);
     }
 
     chunkLoaded(locale) {
