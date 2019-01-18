@@ -3,7 +3,7 @@
  * ReactWidgets globalizeLocalizer() if you use DateTimePicker or Calendar.
  * Should be the same formats as in react-widgets-globalize/index.js
  *
- * All formats must be hard-coded for webpack GlobalizePlugin
+ * All formats must be literals for webpack GlobalizePlugin
  * to export precompiled functions.
  * For example: the following causes compile time ReferenceError: footerFormat is not defined
  * var footerFormat = { date: "full" };
@@ -16,49 +16,50 @@
 
 import Globalize from "globalize";
 
-const DateConverters = {
+class DateConverters {
 
     // Used by Pickers
-    defaultDateFormatter: () => {
+    static defaultDateFormatter() {
         return Globalize.dateFormatter({datetime: 'medium'});
-    },
-    defaultDateParser: () => {
+    }
+    static defaultDateParser() {
         return Globalize.dateParser({datetime: 'medium'});
-    },
+    }
+
     // Also used by TimeList which is used by DateTimePicker
-    timeFormatter: () => {
+    static timeFormatter() {
         return Globalize.dateFormatter({time: "short"})
-    },
-    timeParser: () => {
+    }
+    static timeParser() {
         return Globalize.dateParser({time: "short"})
-    },
-    dateFormatter: () => {
+    }
+    static dateFormatter() {
         return Globalize.dateFormatter({date: "short"})
-    },
-    dateParser: () => {
+    }
+    static dateParser() {
         return Globalize.dateParser({date: "short"})
-    },
+    }
 
     // Used by Calendar which is used by DateTimePicker
-    headerFormatter: () => {
+    static headerFormatter() {
         return Globalize.dateFormatter({raw: "MMMM yyyy"})
-    },
-    footerFormatter: () => {
+    }
+    static footerFormatter() {
         return Globalize.dateFormatter({date: "full"})
-    },
-    weekdayFormatter: () => {
+    }
+    static weekdayFormatter() {
         return Globalize.dateFormatter({raw: 'eeeeee'})
-    },
-    dayOfMonthFormatter: () => {
+    }
+    static dayOfMonthFormatter() {
         return Globalize.dateFormatter({raw: 'd'})
-    },
-    monthFormatter: () => {
+    }
+    static monthFormatter() {
         return Globalize.dateFormatter({raw: 'MMM'})
-    },
-    yearFormatter: () => {
+    }
+    static yearFormatter() {
         return Globalize.dateFormatter({raw: 'yyyy'})
-    },
-    firstOfWeekFormatter: () => {
+    }
+    static firstOfWeekFormatter() {
         return Globalize.dateFormatter({raw: 'e'})
     }
 };

@@ -10,8 +10,8 @@ const globalizeChunkPrefix = 'globalize-compiled-data-';
 import 'react-widgets/dist/css/react-widgets.css';
 import NumberPicker from 'react-widgets/lib/NumberPicker';
 import DateTimePicker from 'react-widgets/lib/DateTimePicker';
-import DateConverters from "./converters/ReactWidgetsDate.js";
-import NumberConverters from "./converters/ReactWidgetsNumber.js";
+import DateConverters from "./reactWidgets/DateConverters.js";
+import NumberConverters from "./reactWidgets/NumberConverters.js";
 import globalizeLocalizer from "react-widgets-globalize";
 globalizeLocalizer();
 

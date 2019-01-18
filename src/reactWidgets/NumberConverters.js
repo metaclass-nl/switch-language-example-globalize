@@ -4,7 +4,7 @@
  * without setting functions on format or parse properties.
  * Should be the same formats as in react-widgets-globalize/index.js
  *
- * All formats must be hard-coded for webpack GlobalizePlugin
+ * All formats must be literals for webpack GlobalizePlugin
  * to export precompiled functions.
  * For example: the following causes compile time ReferenceError: myNumberFormat is not defined
  * var myNumberFormat = {maximumFractionDigits: 2};
@@ -17,22 +17,23 @@
 
 import Globalize from "globalize";
 
-const NumberConverters = {
+class NumberConverters {
 
     // Used for formatting and parsing of the actual number
-    defaultNumberFormatter: () => {
+    static defaultNumberFormatter() {
         return Globalize.numberFormatter({maximumFractionDigits: 0})
-    },
-    defaultNumberParser: () => {
+    }
+
+    static defaultNumberParser()  {
         return Globalize.numberParser({maximumFractionDigits: 0})
-    },
+    }
 
     // Used by number.decimalChar in react-widgets-globalize/index.js
     // to extract the decimal separator.
     // Allways required if NumberPicker or NumberInput not readOnly
-    decimalCharFormatter: () => {
+    static decimalCharFormatter() {
         return Globalize.numberFormatter({raw: "0.0"})
-    },
+    }
 }
 
 export default NumberConverters;
