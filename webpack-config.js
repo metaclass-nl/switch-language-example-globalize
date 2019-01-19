@@ -54,7 +54,7 @@ module.exports = {
 			// filter to a single compiled globalize language
 			// change 'en' to language of choice or remove inject all languages
 			// NOTE: last language will be set language
-			chunks: [ "vendor", "globalize-compiled-data-en", "main" ],
+			chunks: [ "vendors", "globalize-compiled-data-en", "main" ],
 			chunksSortMode: function ( c1, c2 ) {
 				var orderedChunks = [ "vendor", "globalize-compiled-data", "main" ];
 				var o1 = orderedChunks.indexOf( subLocaleNames( c1.names[ 0 ]));
@@ -92,7 +92,7 @@ module.exports = {
             cacheGroups: {
                 commons: {
                     test: /[\\/]node_modules[\\/]/,
-                    name: 'vendor',
+                    name: 'vendors',
                     chunks: 'all'
                 }
             }
