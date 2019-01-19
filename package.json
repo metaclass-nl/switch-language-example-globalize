@@ -19,12 +19,12 @@
   ],
   "homepage": "https://github.com/metaclass-nl/switch-language-example-globalize",
   "maintainers": [
-      {
-        "name": "MetaClass",
-        "url": "https://www.metaclass.nl/"
-      }
-    ],
-   "devDependencies": {
+    {
+      "name": "MetaClass",
+      "url": "https://www.metaclass.nl/"
+    }
+  ],
+  "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.0.0",
     "babel-preset-env": "^1.7.0",
@@ -42,7 +42,7 @@
     "webpack-manifest-plugin": "^2.0.4"
   },
   "scripts": {
-    "start": "webpack-dev-server --config webpack-config.js --hot --progress --colors --inline",
+    "start": "NODE_ENV=development webpack-dev-server --config webpack-config.js --hot --progress --colors --inline",
     "build": "NODE_ENV=production webpack --config webpack-config.js",
     "test": "jest"
   },
@@ -53,5 +53,11 @@
     "react-dom": "^16.7.0",
     "react-widgets": "^4.4.9",
     "react-widgets-globalize": "^5.0.18"
+  },
+  "babel": {
+    "presets": [
+      "env",
+      "react"
+    ]
   }
 }
