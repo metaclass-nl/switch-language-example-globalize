@@ -18,7 +18,7 @@ module.exports = {
 	},
 	output: {
 		path: path.join( __dirname, production ? "./build" : "./tmp" ),
-		publicPath: production ? "" : "http://localhost:9000/",
+		publicPath: production ? "" : "http://localhost:3000/",
 		chunkFilename: "[name].[chunkhash].js",
 		filename: production ? "[name].[chunkhash].js" : "[name].js"
 	},
@@ -43,8 +43,10 @@ module.exports = {
         ]
     },
     devServer: {
-        port: 9000,
-        open: true
+        port: 3000,
+        open: true,
+        disableHostCheck: true,
+        historyApiFallback: true
     },
 	plugins: [
 		new HtmlWebpackPlugin({
