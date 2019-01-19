@@ -50,11 +50,11 @@ created at `./build`. Note that all the production code is already minified usin
 See `package.json` to understand the actual shell command that is used.
 1. Point your browser at `./build/index.html` to run the application using the
 generated production files. Edit this file to display the application using a
-different locale (source code has instructions).
+different initial locale (source code has instructions). Change App const initialLocale accordingly.
 
 ### Limitations
 
-- Uses webpack-dev-server for development, which has a security issues. **Keep
+- Uses webpack-dev-server for development, which has a security issue. **Keep
 'npm start' behind a firewall that only allows local access from the same machine!**
 - Globalize Webpack Plugin requires formatter and parser formats to be literal expressions.
   Using variables will result in compile time errors.
@@ -106,9 +106,6 @@ dynamically loaded. It means fast to load code (small code) and fast to run
 code.
 1. Understand the demo by reading the source code. We have comments there for
 you.
-
-Problem: it is not clear how to dynamcally load the required chunk for a locale
-(requires the chunkhash...) 
 
 ### Development mode
 
