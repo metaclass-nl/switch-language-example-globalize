@@ -1,6 +1,6 @@
 var webpack = require( "webpack" );
 var path = require("path");
-var CommonsChunkPlugin = require( "webpack/lib/optimize/CommonsChunkPlugin" );
+// var CommonsChunkPlugin = require( "webpack/lib/optimize/CommonsChunkPlugin" );
 var HtmlWebpackPlugin = require( "html-webpack-plugin" );
 var GlobalizePlugin = require( "globalize-webpack-plugin" );
 var ManifestPlugin = require('webpack-manifest-plugin');
@@ -19,8 +19,8 @@ module.exports = {
 	output: {
 		path: path.join( __dirname, production ? "./build" : "./tmp" ),
 		publicPath: production ? "" : "http://localhost:9000/",
-		chunkFilename: "[name].[chunkhash].js",
-		filename: production ? "[name].[chunkhash].js" : "[name].js"
+		chunkFilename: "[name].[hash].js",
+		filename: production ? "[name].[hash].js" : "[name].js"
 	},
 	resolve: {
 		extensions: [ "*", ".js" ]
@@ -65,22 +65,35 @@ module.exports = {
 			developmentLocale: "en",
 			supportedLocales: [ "ar", "en", "es", "pt", "ru", "zh", "de" ],
 			messages: "messages/[locale].json",
-			output: "i18n/[locale].[chunkhash].js"
+			output: "i18n/[locale].[hash].js"
 		}),
-        new CommonsChunkPlugin({
-            name: "vendor",
-            minChunks: function(module) {
-                return (
-                    module.context && module.context.indexOf("node_modules") !== -1
-                );
-            }
-        }),
+		// in webpack 4 replaced by SplitChunksPlugin
+        // new CommonsChunkPlugin({
+        //     name: "vendor",
+        //     minChunks: function(module) {
+        //         return (
+        //             module.context && module.context.indexOf("node_modules") !== -1
+        //         );
+        //     }
+        // }),
         new ManifestPlugin({writeToFileEmit: true})
 	].concat( production ? [
-		new webpack.optimize.UglifyJsPlugin({
-			compress: {
-				warnings: false
-			}
-		})
-	] : [] )
+		// removed from webpack 4
+		// new webpack.optimize.UglifyJsPlugin({
+		// 	compress: {
+		// 		warnings: false
+		// 	}
+		// })
+	] : [] ),
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                commons: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'vendor',
+                    chunks: 'all'
+                }
+            }
+        }
+    }
 };
