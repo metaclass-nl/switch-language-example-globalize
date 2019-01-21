@@ -14,6 +14,7 @@ This version is under development.
 
 ```
 git clone https://github.com/metaclass-nl/switch-language-example-globalize.git
+git checkout webpack4
 ```
 Or download the zip file from github and extract all.
 
