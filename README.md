@@ -8,7 +8,7 @@ Furthermore it has been extended to allow the user to change the locale.
 
 ## Help wanted
 
-This setup does not run, see Issue #5 
+This setup does not run, see [Issue #5](https://github.com/metaclass-nl/switch-language-example-globalize/issues/5) 
 
 ## Requirements
 
