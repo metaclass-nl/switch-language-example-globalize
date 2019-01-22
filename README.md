@@ -6,7 +6,9 @@ support for Globalize.js and react-widgets.
 
 Furthermore it has been extended to allow the user to change the locale.
 
-This version is under development. 
+## Help wanted
+
+This setup does not run, see Issue #5 
 
 ## Requirements
 
@@ -14,6 +16,7 @@ This version is under development.
 
 ```
 git clone https://github.com/metaclass-nl/switch-language-example-globalize.git
+git checkout webpack4
 ```
 Or download the zip file from github and extract all.
 
