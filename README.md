@@ -4,7 +4,7 @@ This is a modified version of examples/app-npm-webpack from globalize 1.4.0.
 It has been adapted for compatibility with start-react-app but with
 support for Globalize.js and react-widgets. 
 
-Furthermore it has been extended to allow the user to change the locale.
+Furthermore it has been extended to allow the user to change the locale. [Click here](https://metaclass.nl/globalize/) to try it on line.
 
 This version is under development. 
 
