@@ -96,6 +96,7 @@ module.exports = {
                     chunks: 'all'
                 }
             }
-        }
+        },
+        minimize: false
     }
 };
