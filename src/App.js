@@ -5,6 +5,7 @@
 import React, { Component } from 'react';
 
 import Globalize from "globalize";
+// make this LocaleDataLoader
 import LocaleChunkLoader, {globalizeChunkPrefix} from './globalizeWebpackPlugin/LocaleChunkLoader.js'
 
 import 'react-widgets/dist/css/react-widgets.css';

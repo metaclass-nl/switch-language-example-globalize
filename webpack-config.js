@@ -2,7 +2,7 @@ var webpack = require( "webpack" );
 var path = require("path");
 // var CommonsChunkPlugin = require( "webpack/lib/optimize/CommonsChunkPlugin" );
 var HtmlWebpackPlugin = require( "html-webpack-plugin" );
-var GlobalizePlugin = require( "globalize-webpack-plugin" );
+var WebpackPlugin = require( "./src/WebpackPlugin.js" );
 var ManifestPlugin = require('webpack-manifest-plugin');
 
 var production = process.env.NODE_ENV === "production";
@@ -54,20 +54,21 @@ module.exports = {
 			// filter to a single compiled globalize language
 			// change 'en' to language of choice or remove inject all languages
 			// NOTE: last language will be set language
-			chunks: [ "vendors", "globalize-compiled-data-en", "main" ],
+			chunks: [ "vendors", "main" ],
 			chunksSortMode: function ( c1, c2 ) {
-				var orderedChunks = [ "vendor", "globalize-compiled-data", "main" ];
+				var orderedChunks = [ "vendors", "main" ];
 				var o1 = orderedChunks.indexOf( subLocaleNames( c1.names[ 0 ]));
 				var o2 = orderedChunks.indexOf( subLocaleNames( c2.names[ 0 ]));
 				return o1 - o2;
 			},
 		}),
-		new GlobalizePlugin({
+		new WebpackPlugin({
 			production: true,
 			developmentLocale: "en",
 			supportedLocales: [ "ar", "en", "es", "pt", "ru", "zh", "de" ],
 			messages: "messages/[locale].json",
-			output: "i18n/[locale].[hash].js"
+			output: "i18n/[locale].[hash].js",
+            tmpdirBase: "."
 		}),
 		// in webpack 4 replaced by SplitChunksPlugin
         // new CommonsChunkPlugin({
@@ -78,6 +79,7 @@ module.exports = {
         //         );
         //     }
         // }),
+
         new ManifestPlugin({writeToFileEmit: true})
 	].concat( production ? [
 		// removed from webpack 4
