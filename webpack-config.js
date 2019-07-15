@@ -1,13 +1,21 @@
 var webpack = require( "webpack" );
 var path = require("path");
-// var CommonsChunkPlugin = require( "webpack/lib/optimize/CommonsChunkPlugin" );
-var HtmlWebpackPlugin = require( "html-webpack-plugin" );
-var WebpackPlugin = require( "./src/WebpackPlugin.js" );
+var production = process.env.NODE_ENV === "production";
+var supportedLocales = require( "./src/supportedLocales.json" );
 var ManifestPlugin = require('webpack-manifest-plugin');
 
-var production = process.env.NODE_ENV === "production";
-var globalizeCompiledDataRegex = new RegExp( /^(globalize\-compiled\-data)\-\S+$/ );
+var HtmlWebpackPlugin = require( "html-webpack-plugin" );
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
+var DynamicGlobalizeWebpackPlugin = require( "./src/globalize/DynamicWebpackPlugin.js" );
+var dgwPluginInstance = new DynamicGlobalizeWebpackPlugin({
+    production: production,
+    developmentLocale: "en",
+    supportedLocales: supportedLocales,
+    messages: "messages/[locale].json",
+})
+
+var globalizeCompiledDataRegex = new RegExp( /^(globalize\-compiled\-data)\-\S+$/ );
 function subLocaleNames( name ) {
 	return name.replace( globalizeCompiledDataRegex, "$1" );
 }
@@ -37,7 +45,7 @@ module.exports = {
             { test: /\.css$/, use: ['style-loader', 'css-loader'] },
             // images and fonts
             {
-                test: /\.(gif|ttf|eot|svg|woff2?)$/,
+                test: /\.(gif|ttf|eot|svg|jpg|woff2?)$/,
                 use: 'url-loader?name=[name].[ext]',
             },
         ]
@@ -62,24 +70,10 @@ module.exports = {
 				return o1 - o2;
 			},
 		}),
-		new WebpackPlugin({
-			production: true,
-			developmentLocale: "en",
-			supportedLocales: [ "ar", "en", "es", "pt", "ru", "zh", "de" ],
-			messages: "messages/[locale].json",
-			output: "i18n/[locale].[hash].js",
-            tmpdirBase: "."
-		}),
-		// in webpack 4 replaced by SplitChunksPlugin
-        // new CommonsChunkPlugin({
-        //     name: "vendor",
-        //     minChunks: function(module) {
-        //         return (
-        //             module.context && module.context.indexOf("node_modules") !== -1
-        //         );
-        //     }
-        // }),
-
+        dgwPluginInstance,
+        new CopyWebpackPlugin(
+            dgwPluginInstance.getLocalizeDataCopyPatterns()
+        ),
         new ManifestPlugin({writeToFileEmit: true})
 	].concat( production ? [
 		// removed from webpack 4

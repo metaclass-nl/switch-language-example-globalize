@@ -2,11 +2,36 @@
  * class has not been refactored into SOLID components.
  */
 
+const initialLocale = 'en';
+const availableLocales = require("./supportedLocales.json");
+
 import React, { Component } from 'react';
 
 import Globalize from "globalize";
-// make this LocaleDataLoader
-import LocaleChunkLoader, {globalizeChunkPrefix} from './globalizeWebpackPlugin/LocaleChunkLoader.js'
+// supplementals are loaded by LocaleDataLoader
+
+// remove this if you do not need timezones, it's 2,9 Mb!
+Globalize.loadTimeZone(
+    require( 'iana-tz-data' )
+);
+
+// Stacially load data for initial locale,
+// hardcoded locale, to be adapted to actual default locale
+Globalize.loadMessages(
+    require( "../messages/en.json" ),
+);
+Globalize.load(
+    require( "cldr-data/main/en/ca-generic.json" ),
+    require( "cldr-data/main/en/ca-gregorian.json" ),
+    require( "cldr-data/main/en/numbers.json" ),
+    require( "cldr-data/main/en/currencies.json" ),
+    require( "cldr-data/main/en/dateFields.json" ),
+    require( "cldr-data/main/en/timeZoneNames.json" ),
+    require( "cldr-data/main/en/units.json" ),
+);
+Globalize.locale(initialLocale);
+
+import LocaleDataLoader, {globalizeChunkPrefix} from './globalize/LocaleDataLoader.js'
 
 import 'react-widgets/dist/css/react-widgets.css';
 import NumberPicker from 'react-widgets/lib/NumberPicker';
@@ -16,21 +41,20 @@ import NumberConverters from "./reactWidgets/NumberConverters.js";
 import globalizeLocalizer from "react-widgets-globalize";
 globalizeLocalizer();
 
-const initialLocale = 'en';
 
 class App extends Component {
 
     constructor(props) {
         super(props);
+        this.availableLocales = availableLocales;
         this.startTime = new Date();
         this.state = {elapsedTime: 0, locale: initialLocale};
         this.formatters = {};
         this.initFormatters();
-        this.localeChunkLoader = new LocaleChunkLoader(this.chunkLoaded.bind(this), this.manifestLoaded.bind(this))
+        this.localeDataLoader = new LocaleDataLoader(this.localeDataLoaded.bind(this))
     }
 
     componentDidMount() {
-        this.localeChunkLoader.loadManifest();
         this.timerId = setInterval(
             () => this.tick(),
             1000
@@ -114,7 +138,9 @@ class App extends Component {
                 </tr>
                 <tr>
                     <td><span id="date-time-zone-label">{Globalize.formatMessage( "date-time-zone-label" )}</span></td>
-                    <td>"<span id="date-time-zone">{this.formatters.dateWithTimeZone( new Date() )}</span>"</td>
+                    <td>"<span id="date-time-zone">
+                        {this.formatters.dateWithTimeZone( new Date() )}
+                        </span>"</td>
                 </tr>
                 <tr>
                     <td><span id="date-to-parts-label">{Globalize.formatMessage( "date-to-parts-label" )}</span></td>
@@ -186,37 +212,26 @@ class App extends Component {
         console.log('Score has changed to '+ value);
     }
 
-    manifestLoaded(manifest) {
-        this.setState({manifest: manifest});
-    }
-
     renderSelectLocale() {
-        if (this.state.manifest === undefined) {
-            return;
-        }
         const links = [];
-        var chunk;
         let comma = '';
-        for (chunk in this.state.manifest) {
-            if (chunk.startsWith(globalizeChunkPrefix)) {
-                let locale = chunk.substr(globalizeChunkPrefix.length, chunk.length - globalizeChunkPrefix.length - 3);
-                if (locale != this.state.locale) {
-                    links.push(<span key={locale}>{comma}<a href="#" onClick={this.changeLocale.bind(this)} id={locale}>{locale}</a></span>)
-                    let comma = ', ';
-                }
+        for (let locale of this.availableLocales) {
+            if (locale != this.state.locale) {
+                links.push(<span key={locale}>{comma}<a href="#" onClick={this.changeLocale.bind(this)} id={locale}>{locale}</a></span>)
+                let comma = ', ';
             }
         };
         return links;
     }
 
     changeLocale(e) {
-        this.localeChunkLoader.loadChunkFor(e.target.id);
+        this.localeDataLoader.loadDataFor(e.target.id);
     }
 
-    chunkLoaded(locale) {
+    localeDataLoaded(locale) {
         Globalize.locale(locale);
-        this.setState({locale: locale});
         this.initFormatters();
+        this.setState({locale: locale});
     }
 }
 
