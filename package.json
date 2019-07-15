@@ -35,6 +35,7 @@
     "globalize": "^1.3.0",
     "globalize-webpack-plugin": "^3.0.0",
     "html-webpack-plugin": "^3.2.0",
+    "jest": "^24.8.0",
     "skip-amd-webpack-plugin": "^1.0.0",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
@@ -52,7 +53,6 @@
   "dependencies": {
     "cldr-data": ">=25",
     "iana-tz-data": "^2017.2.0",
-    "jest": "^23.6.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-widgets": "^4.4.9",
