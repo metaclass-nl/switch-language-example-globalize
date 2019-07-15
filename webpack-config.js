@@ -1,18 +1,18 @@
 var webpack = require( "webpack" );
 var path = require("path");
 var production = process.env.NODE_ENV === "production";
-var supportedLocales = require( "./src/supportedLocales.json" );
 var ManifestPlugin = require('webpack-manifest-plugin');
 
 var HtmlWebpackPlugin = require( "html-webpack-plugin" );
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var DynamicGlobalizeWebpackPlugin = require( "./src/globalize/DynamicWebpackPlugin.js" );
+var supportedLocales = require( "./src/supportedLocales.json" );
 var dgwPluginInstance = new DynamicGlobalizeWebpackPlugin({
     production: production,
-    developmentLocale: "en",
+    initialLocale: "en",
     supportedLocales: supportedLocales,
-    messages: "messages/[locale].json",
+    messages: "messages",
 })
 
 var globalizeCompiledDataRegex = new RegExp( /^(globalize\-compiled\-data)\-\S+$/ );

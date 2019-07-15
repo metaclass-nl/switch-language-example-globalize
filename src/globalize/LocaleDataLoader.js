@@ -42,7 +42,9 @@ class LocaleDataLoader {
     /**
      * @param function onChunkLoaded To be called when a chunk has been loaded
      */
-    constructor(onDataLoaded) {
+    constructor(initialLocale, onDataLoaded) {
+        this.loaded = { };
+        this.loaded[initialLocale] = true; // Data of initial locale is supposed to be loaded statically by App
         this.onDataLoaded = onDataLoaded;
     }
 
@@ -56,8 +58,9 @@ class LocaleDataLoader {
     }
 
     loadDataFor(locale) {
-        // We could keep track of the chunks that are already loaded and not reload them,
-        // but the typical user only selects his locale once.
+        if (this.loaded[locale]) {
+            return this.onDataLoaded(locale);
+        }
 
         const that = this;
         let loadCount = 0;
@@ -88,10 +91,8 @@ class LocaleDataLoader {
     }
 
     ifAllLoadedCallLoaded(loadCount, locale) {
-        if (loadCount > mainLocaleFiles.length + 1) {
-            alert('loaded too many');
-        }
-        if (loadCount > mainLocaleFiles.length) {
+         if (loadCount > mainLocaleFiles.length) {
+            this.loaded[locale] = true;
             this.onDataLoaded(locale);
         }
     }

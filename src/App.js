@@ -51,7 +51,7 @@ class App extends Component {
         this.state = {elapsedTime: 0, locale: initialLocale};
         this.formatters = {};
         this.initFormatters();
-        this.localeDataLoader = new LocaleDataLoader(this.localeDataLoaded.bind(this))
+        this.localeDataLoader = new LocaleDataLoader(initialLocale, this.localeDataLoaded.bind(this))
     }
 
     componentDidMount() {

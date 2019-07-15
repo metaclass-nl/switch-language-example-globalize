@@ -1,13 +1,12 @@
 "use strict";
 
 const SkipAMDPlugin = require("skip-amd-webpack-plugin");
-const NormalModuleReplacementPlugin = require("webpack/lib/NormalModuleReplacementPlugin");
 
 class DynamicWebpackPlugin {
 
     constructor(attributes) {
         this.production = attributes.production;
-        this.developmentLocale = attributes.developmentLocale;
+        this.initialLocale = attributes.initialLocale;
         this.supportedLocales = attributes.supportedLocales;
         this.messages = attributes.messages;
     }
@@ -20,9 +19,11 @@ class DynamicWebpackPlugin {
 
     getLocalizeDataCopyPatterns() {
         const basePath = 'node_modules/cldr-data/main/';
-        const result = [ { from: 'messages', to: 'messages' } ];
+        const result = [ { from: this.messages, to: this.messages } ];
         for (let locale of this.supportedLocales) {
-            result.push({ from: basePath + locale, to: basePath + locale });
+            if (locale != this.initialLocale) {
+                result.push({from: basePath + locale, to: basePath + locale});
+            } // else data for initial locale is expected to be included statically
         }
         return result;
     }
