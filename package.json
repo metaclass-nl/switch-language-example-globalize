@@ -36,6 +36,7 @@
     "globalize-webpack-plugin": "^2.1.0",
     "html-webpack-plugin": "^2.30.1",
     "iana-tz-data": "^2017.1.0",
+    "jest": "^24.8.0",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
     "webpack": "^3.11.0",
@@ -49,7 +50,6 @@
   },
   "cldr-data-urls-filter": "(core|dates|numbers|units)",
   "dependencies": {
-    "jest": "^23.6.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-widgets": "^4.4.9",
