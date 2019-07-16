@@ -1,0 +1,5 @@
+{
+  "initialLocale": "en",
+  "supportedLocales": ["ar", "de", "en", "es", "pt", "ru", "zh"],
+  "messages": "messages"
+}
