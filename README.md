@@ -2,6 +2,7 @@
 
 This is a modified version of [examples/app-npm-webpack](https://github.com/globalizejs/globalize/tree/master/examples/app-npm-webpack) 
 from globalize 1.4.0 that allows the user to change the locale, then dynamically loads aditional localize converters and messages. 
+[click here to try it](https://metaclass.nl/globalize/react-webpack4)
 
 This version uses webpack 4, React.js and also includes examples with [react-widgets](https://github.com/jquense/react-widgets). 
 It does not use [globalize-webpack-plugin](https://github.com/rxaviers/globalize-webpack-plugin) but
