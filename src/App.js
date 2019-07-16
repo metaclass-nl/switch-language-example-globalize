@@ -2,8 +2,7 @@
  * class has not been refactored into SOLID components.
  */
 
-const initialLocale = 'en';
-const availableLocales = require("./supportedLocales.json");
+const localeSettings = require("../localeSettings.json");
 
 import React, { Component } from 'react';
 
@@ -16,7 +15,7 @@ Globalize.loadTimeZone(
 );
 
 // Stacially load data for initial locale,
-// hardcoded locale, to be adapted to actual default locale
+// hardcoded locale, to be adapted to actual initial locale
 Globalize.loadMessages(
     require( "../messages/en.json" ),
 );
@@ -29,7 +28,7 @@ Globalize.load(
     require( "cldr-data/main/en/timeZoneNames.json" ),
     require( "cldr-data/main/en/units.json" ),
 );
-Globalize.locale(initialLocale);
+Globalize.locale(localeSettings.initialLocale);
 
 import LocaleDataLoader, {globalizeChunkPrefix} from './globalize/LocaleDataLoader.js'
 
@@ -46,12 +45,12 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        this.availableLocales = availableLocales;
+        this.availableLocales = localeSettings.supportedLocales;
         this.startTime = new Date();
-        this.state = {elapsedTime: 0, locale: initialLocale};
+        this.state = {elapsedTime: 0, locale: localeSettings.initialLocale};
         this.formatters = {};
         this.initFormatters();
-        this.localeDataLoader = new LocaleDataLoader(initialLocale, this.localeDataLoaded.bind(this))
+        this.localeDataLoader = new LocaleDataLoader(localeSettings, this.localeDataLoaded.bind(this))
     }
 
     componentDidMount() {

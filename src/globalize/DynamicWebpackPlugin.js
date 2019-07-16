@@ -2,10 +2,13 @@
 
 const SkipAMDPlugin = require("skip-amd-webpack-plugin");
 
+/**
+ * Webpack Plugin that does not precompile localize converter funcions.
+ * cldr has to be used to load localization data.
+ */
 class DynamicWebpackPlugin {
 
     constructor(attributes) {
-        this.production = attributes.production;
         this.initialLocale = attributes.initialLocale;
         this.supportedLocales = attributes.supportedLocales;
         this.messages = attributes.messages;

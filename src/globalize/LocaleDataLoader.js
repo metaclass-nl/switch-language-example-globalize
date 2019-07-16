@@ -9,6 +9,8 @@ const mainLocaleFiles = [
 
 import Globalize from "globalize";
 
+// You may have to activate more loading of supplemental data depending
+// of the Globalize functions you use in your application.
 Globalize.load(
 //    require( "cldr-data/supplemental/aliases.json" ),
 //    require( "cldr-data/supplemental/calendarData.json" ),
@@ -37,14 +39,18 @@ require( "cldr-data/supplemental/currencyData.json" ),
     //    require( "cldr-data/supplemental/windowsZones.json" ),
 );
 
+/**
+ * Loads aditional localization data dynamically at run time from the web server.
+ */
 class LocaleDataLoader {
 
     /**
      * @param function onChunkLoaded To be called when a chunk has been loaded
      */
-    constructor(initialLocale, onDataLoaded) {
+    constructor(localeSettings, onDataLoaded) {
+        this.localeSettings = localeSettings;
         this.loaded = { };
-        this.loaded[initialLocale] = true; // Data of initial locale is supposed to be loaded statically by App
+        this.loaded[localeSettings.initialLocale] = true; // Data of initial locale is supposed to be loaded statically by App
         this.onDataLoaded = onDataLoaded;
     }
 
@@ -58,6 +64,11 @@ class LocaleDataLoader {
     }
 
     loadDataFor(locale) {
+        if (this.localeSettings.supportedLocales.indexOf(locale) == -1) {
+            // eslint-disable-next-line no-console
+            console.log('Locale not supported: ' + locale);
+            return;
+        }
         if (this.loaded[locale]) {
             return this.onDataLoaded(locale);
         }
@@ -67,7 +78,7 @@ class LocaleDataLoader {
 
         const fetchHeaders = new Headers({"accept": "application/json", 'X-Requested-With': 'XMLHttpRequest'});
 
-        fetch("messages/" + locale + ".json", { headers: fetchHeaders }).then(response => {
+        fetch(this.localeSettings.messages + "/" + locale + ".json", { headers: fetchHeaders }).then(response => {
             return response.json();
         })
         .then(

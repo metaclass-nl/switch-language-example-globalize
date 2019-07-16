@@ -1,19 +1,15 @@
 var webpack = require( "webpack" );
 var path = require("path");
 var production = process.env.NODE_ENV === "production";
-var ManifestPlugin = require('webpack-manifest-plugin');
+// var ManifestPlugin = require('webpack-manifest-plugin');
 
 var HtmlWebpackPlugin = require( "html-webpack-plugin" );
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var DynamicGlobalizeWebpackPlugin = require( "./src/globalize/DynamicWebpackPlugin.js" );
-var supportedLocales = require( "./src/supportedLocales.json" );
-var dgwPluginInstance = new DynamicGlobalizeWebpackPlugin({
-    production: production,
-    initialLocale: "en",
-    supportedLocales: supportedLocales,
-    messages: "messages",
-})
+var dgwPluginInstance = new DynamicGlobalizeWebpackPlugin(
+    require('./localeSettings.json') // if you change initialLocale you need to adapt static locale data loading in App.js
+)
 
 var globalizeCompiledDataRegex = new RegExp( /^(globalize\-compiled\-data)\-\S+$/ );
 function subLocaleNames( name ) {
@@ -73,8 +69,8 @@ module.exports = {
         dgwPluginInstance,
         new CopyWebpackPlugin(
             dgwPluginInstance.getLocalizeDataCopyPatterns()
-        ),
-        new ManifestPlugin({writeToFileEmit: true})
+        )
+        //, new ManifestPlugin({writeToFileEmit: true})
 	].concat( production ? [
 		// removed from webpack 4
 		// new webpack.optimize.UglifyJsPlugin({
