@@ -1,12 +1,16 @@
 # Switch language example with globalize.js and react-widgets 
 
-This is a modified version of examples/app-npm-webpack from globalize 1.4.0.
-It has been adapted for compatibility with start-react-app but with
-support for Globalize.js and react-widgets. 
+This is a modified version of [examples/app-npm-webpack](https://github.com/globalizejs/globalize/tree/master/examples/app-npm-webpack) 
+from globalize 1.4.0 that allows the user to change the locale, then dynamically loads aditional localize converters and messages. 
+[Click here](https://metaclass.nl/globalize/) to try it on line.
 
-Furthermore it has been extended to allow the user to change the locale. [Click here](https://metaclass.nl/globalize/) to try it on line.
+This version uses [globalize-webpack-plugin](https://github.com/rxaviers/globalize-webpack-plugin) 2.1 with webpack 3,
+React.js and also includes examples with [react-widgets](https://github.com/jquense/react-widgets).
 
-This version is under development. 
+Because of the webpack plugins it does not run on create react app, but instead it
+uses HtmlWebpackPlugin to mimic the behavior of create react app. Advantage: no eject
+function that creates many dependencies - only direct dependencies are in package.json,
+indirect dependencies are left to be managed inderectly.
 
 ## Requirements
 
@@ -14,6 +18,7 @@ This version is under development.
 
 ```
 git clone https://github.com/metaclass-nl/switch-language-example-globalize.git
+git checkout react-webpack-plugin2
 ```
 Or download the zip file from github and extract all.
 
@@ -54,7 +59,7 @@ different initial locale (source code has instructions). Change App const initia
 
 ### Limitations
 
-- Uses webpack-dev-server for development, which has a security issue. **Keep
+- For reasons of security you are advised to **Keep
 'npm start' behind a firewall that only allows local access from the same machine!**
 - Globalize Webpack Plugin requires formatter and parser formats to be literal expressions.
   Using variables will result in compile time errors.
@@ -78,12 +83,12 @@ To prevent these errors:
 
 ### Production mode
 
-This version uses Globalize runtime mode for both development and production.
+This version uses Globalize production mode for both development and production.
 This is for two reasons:
 - In development mode Globalize Webpack Plugin includes all localization data for the
   development locale. This does not only result in a big bundle, it also prevents
   bundling errors to surface in development. But they will occur in productions,
-  whick is too late and hard to debug.
+  which is hard to debug and  too late.
 - In development mode Globalize Webpack Plugin only includes localization data for the
   development locale, so changing the locale a runtime will allways cause errors.
 
