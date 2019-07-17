@@ -9,7 +9,7 @@ It does not use [globalize-webpack-plugin](https://github.com/rxaviers/globalize
 instead, uses [skip-amd-webpack-plugin](https://github.com/rxaviers/skip-amd-webpack-plugin) 
 and loads localization data through cldr. 
 
-Dynamic loading is done by `src/globalize/LocalDataLoader.js`. You may need to adapt it so suit the needs of your own application.
+Dynamic loading is done by `src/globalize/LocaleDataLoader.js`. You may need to adapt it so suit the needs of your own application.
 
 Other versions of this example are available that combine globalize.js with react.js and [react-widgets](https://github.com/jquense/react-widgets):
 - [for webpack 4](https://github.com/metaclass-nl/switch-language-example-globalize/tree/react-webpack4) using cldr
