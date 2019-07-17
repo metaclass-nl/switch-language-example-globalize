@@ -1,6 +1,6 @@
 {
   "name": "switch-language-example-globalize",
-  "description": "An example of dynamically switching language using globalize.js and react-widgets aiming to be compatible with start-react-app.",
+  "description": "An example of dynamically switching language using globalize.js",
   "keywords": [
     "globalization",
     "internationalization",
@@ -8,14 +8,7 @@
     "localization",
     "i18n",
     "localize",
-    "react",
-    "react-widgets",
-    "date picker",
-    "date input",
-    "number picker",
-    "number input",
-    "webpack",
-    "start-react-app"
+    "webpack"
   ],
   "homepage": "https://github.com/metaclass-nl/switch-language-example-globalize",
   "maintainers": [
@@ -50,11 +43,7 @@
   "cldr-data-urls-filter": "(core|dates|numbers|units)",
   "dependencies": {
     "cldr-data": ">=25",
-    "iana-tz-data": "^2017.2.0",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
-    "react-widgets": "^4.4.9",
-    "react-widgets-globalize": "^5.0.18"
+    "iana-tz-data": "^2017.2.0"
   },
   "babel": {
     "presets": [
