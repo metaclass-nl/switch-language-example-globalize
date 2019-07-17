@@ -69,3 +69,8 @@ function that creates many dependencies - only direct dependencies are in packag
 indirect dependencies are left to be managed inderectly.
 - If you change the initialLocale you need to modify the static includes of 
   the locale data in App.js accordingly.
+- globalization data files are not versioned (do not have the hash in their path) 
+  so caching may cause errors in the application if they are updated. You may need to 
+  clear the cache of your webserver. Theoretically they may also be cached elsewhere
+  between your server and the clients, but if that would really happen any api call
+  using json could be cached so most single page applications would not work properly.
