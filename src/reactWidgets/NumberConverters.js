@@ -4,7 +4,7 @@
  * without setting functions on format or parse properties.
  * Should be the same formats as in react-widgets-globalize/index.js
  *
- * All formats must be literals for webpack GlobalizePlugin
+ * If you use webpack GlobalizePlugin all formats must be literals
  * to export precompiled functions.
  * For example: the following causes compile time ReferenceError: myNumberFormat is not defined
  * var myNumberFormat = {maximumFractionDigits: 2};

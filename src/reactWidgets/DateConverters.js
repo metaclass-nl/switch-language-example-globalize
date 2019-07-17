@@ -3,7 +3,7 @@
  * ReactWidgets globalizeLocalizer() if you use DateTimePicker or Calendar.
  * Should be the same formats as in react-widgets-globalize/index.js
  *
- * All formats must be literals for webpack GlobalizePlugin
+ * If you use webpack GlobalizePlugin all formats must be literals
  * to export precompiled functions.
  * For example: the following causes compile time ReferenceError: footerFormat is not defined
  * var footerFormat = { date: "full" };

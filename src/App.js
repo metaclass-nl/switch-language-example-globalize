@@ -113,92 +113,87 @@ class App extends Component {
             unit: this.formatters.unit( 60 )
         });
 
-        return <div id="demo">
+        return <div>
             <h1>Globalize App example using Webpack (and React)</h1>
-
-            <p id="intro-1">{Globalize.formatMessage( "intro-1" )}</p>
-            <table border="1" style={{marginBottom: "1em"}}>
-                <tbody>
-                <tr>
-                    <td><span id="number-label">{Globalize.formatMessage( "number-label" )}</span></td>
-                    <td>"<span id="number">{this.formatters.number( 12345.6789 )}</span>"</td>
-                </tr>
-                <tr>
-                    <td><span id="number-compact-label">{Globalize.formatMessage( "number-compact-label" )}</span></td>
-                    <td>"<span id="number-compact">{this.formatters.numberCompact( 12345.6789 )}</span>"</td>
-                </tr>
-                <tr>
-                    <td><span id="currency-label">{Globalize.formatMessage( "currency-label" )}</span></td>
-                    <td>"<span id="currency">{this.formatters.currency( 69900 )}</span>"</td>
-                </tr>
-                <tr>
-                    <td><span id="date-label">{Globalize.formatMessage( "date-label" )}</span></td>
-                    <td>"<span id="date">{this.formatters.date( new Date() )}</span>"</td>
-                </tr>
-                <tr>
-                    <td><span id="date-time-zone-label">{Globalize.formatMessage( "date-time-zone-label" )}</span></td>
-                    <td>"<span id="date-time-zone">
-                        {this.formatters.dateWithTimeZone( new Date() )}
-                        </span>"</td>
-                </tr>
-                <tr>
-                    <td><span id="date-to-parts-label">{Globalize.formatMessage( "date-to-parts-label" )}</span></td>
-                    <td>"<span id="date-to-parts">{this.formatters.dateToParts( new Date() )}</span>"</td>
-                </tr>
-                <tr>
-                    <td><span id="relative-time-label">{Globalize.formatMessage( "relative-time-label" )}</span></td>
-                    <td>"<span id="relative-time">{this.formatters.relativeTime( this.state.elapsedTime )}</span>"</td>
-                </tr>
-                <tr>
-                    <td><span id="unit-label">{Globalize.formatMessage( "unit-label" )}</span></td>
-                    <td>"<span id="unit">{this.formatters.unit( 60 )}</span>"</td>
-                </tr>
-                </tbody>
-            </table>
-            <p id="message-1">
-                {message1}
-            </p>
-            <p id="message-2">
-                {Globalize.formatMessage( "message-2", {
-                    count: 3
-                })}
-            </p>
-            <table border="1" style={{marginBottom: "1em"}}>
-                <tbody>
+            <p>Select your locale: <select name="" id="selectLocale" value={this.state.locale} onChange={this.changeLocale.bind(this)}>
+                { this.renderSelectLocaleOptions() }
+            </select></p>
+            <div id="demo" style={{border: '1px solid grey', padding: '5px'}}>
+                <p id="intro-1">{Globalize.formatMessage( "intro-1" )}</p>
+                <table border="1" style={{marginBottom: "1em"}}>
+                    <tbody>
                     <tr>
-                        <td>DateTimePicker</td>
-                        <td><DateTimePicker
-                                name="when"
-                                format={DateConverters.defaultDateFormatter()}
-                                parse={DateConverters.defaultDateParser()}
-                                placeholder="When"
-                                onChange={this.whenChanged.bind(this)}
-                            />
-                        </td>
+                        <td><span id="number-label">{Globalize.formatMessage( "number-label" )}</span></td>
+                        <td>"<span id="number">{this.formatters.number( 12345.6789 )}</span>"</td>
                     </tr>
                     <tr>
-                        <td>NumberPicker</td>
-                        <td><NumberPicker
-                                name="score"
-                                step={1}
-                                format={NumberConverters.defaultNumberFormatter()}
-                                parse={NumberConverters.defaultNumberParser()}
-                                placeholder="Score"
-                                onChange={this.scoreChanged.bind(this)}
-                            />
-                        </td>
+                        <td><span id="number-compact-label">{Globalize.formatMessage( "number-compact-label" )}</span></td>
+                        <td>"<span id="number-compact">{this.formatters.numberCompact( 12345.6789 )}</span>"</td>
                     </tr>
                     <tr>
-                        <td>Current locale</td>
-                        <td>"{this.state.locale}"</td>
+                        <td><span id="currency-label">{Globalize.formatMessage( "currency-label" )}</span></td>
+                        <td>"<span id="currency">{this.formatters.currency( 69900 )}</span>"</td>
                     </tr>
                     <tr>
-                        <td>Click a link to change the locale</td>
-                        <td>{this.renderSelectLocale()}</td>
+                        <td><span id="date-label">{Globalize.formatMessage( "date-label" )}</span></td>
+                        <td>"<span id="date">{this.formatters.date( new Date() )}</span>"</td>
                     </tr>
-
-                </tbody>
-            </table>
+                    <tr>
+                        <td><span id="date-time-zone-label">{Globalize.formatMessage( "date-time-zone-label" )}</span></td>
+                        <td>"<span id="date-time-zone">
+                            {this.formatters.dateWithTimeZone( new Date() )}
+                            </span>"</td>
+                    </tr>
+                    <tr>
+                        <td><span id="date-to-parts-label">{Globalize.formatMessage( "date-to-parts-label" )}</span></td>
+                        <td>"<span id="date-to-parts">{this.formatters.dateToParts( new Date() )}</span>"</td>
+                    </tr>
+                    <tr>
+                        <td><span id="relative-time-label">{Globalize.formatMessage( "relative-time-label" )}</span></td>
+                        <td>"<span id="relative-time">{this.formatters.relativeTime( this.state.elapsedTime )}</span>"</td>
+                    </tr>
+                    <tr>
+                        <td><span id="unit-label">{Globalize.formatMessage( "unit-label" )}</span></td>
+                        <td>"<span id="unit">{this.formatters.unit( 60 )}</span>"</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p id="message-1">
+                    {message1}
+                </p>
+                <p id="message-2">
+                    {Globalize.formatMessage( "message-2", {
+                        count: 3
+                    })}
+                </p>
+                <table border="1" style={{marginBottom: "1em"}}>
+                    <tbody>
+                        <tr>
+                            <td>DateTimePicker</td>
+                            <td><DateTimePicker
+                                    name="when"
+                                    format={DateConverters.defaultDateFormatter()}
+                                    parse={DateConverters.defaultDateParser()}
+                                    placeholder="When"
+                                    onChange={this.whenChanged.bind(this)}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>NumberPicker</td>
+                            <td><NumberPicker
+                                    name="score"
+                                    step={1}
+                                    format={NumberConverters.defaultNumberFormatter()}
+                                    parse={NumberConverters.defaultNumberParser()}
+                                    placeholder="Score"
+                                    onChange={this.scoreChanged.bind(this)}
+                                />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
         </div>
     }
@@ -211,20 +206,16 @@ class App extends Component {
         console.log('Score has changed to '+ value);
     }
 
-    renderSelectLocale() {
+    renderSelectLocaleOptions() {
         const links = [];
-        let comma = '';
         for (let locale of this.availableLocales) {
-            if (locale != this.state.locale) {
-                links.push(<span key={locale}>{comma}<a href="#" onClick={this.changeLocale.bind(this)} id={locale}>{locale}</a></span>)
-                let comma = ', ';
-            }
+            links.push(<option value={locale}>{locale}</option>);
         };
         return links;
     }
 
     changeLocale(e) {
-        this.localeDataLoader.loadDataFor(e.target.id);
+        this.localeDataLoader.loadDataFor(e.target.value);
     }
 
     localeDataLoaded(locale) {

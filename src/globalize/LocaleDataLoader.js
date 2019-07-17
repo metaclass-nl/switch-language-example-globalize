@@ -41,71 +41,67 @@ require( "cldr-data/supplemental/currencyData.json" ),
 
 /**
  * Loads aditional localization data dynamically at run time from the web server.
+ * @param function onChunkLoaded To be called when a chunk has been loaded
  */
-class LocaleDataLoader {
+function LocaleDataLoader(localeSettings, onDataLoaded) {
+    this.localeSettings = localeSettings;
+    this.loaded = { };
+    this.loaded[localeSettings.initialLocale] = true; // Data of initial locale is supposed to be loaded statically by App
+    this.onDataLoaded = onDataLoaded;
+}
 
-    /**
-     * @param function onChunkLoaded To be called when a chunk has been loaded
-     */
-    constructor(localeSettings, onDataLoaded) {
-        this.localeSettings = localeSettings;
-        this.loaded = { };
-        this.loaded[localeSettings.initialLocale] = true; // Data of initial locale is supposed to be loaded statically by App
-        this.onDataLoaded = onDataLoaded;
+
+LocaleDataLoader.prototype.mainPaths = function(locale) {
+    const basePath = 'node_modules/cldr-data/main/';
+    const result = [];
+    for (let file of mainLocaleFiles) {
+        result.push(basePath + locale + '/' + file);
+    }
+    return result;
+}
+
+LocaleDataLoader.prototype.loadDataFor = function(locale) {
+    if (this.localeSettings.supportedLocales.indexOf(locale) == -1) {
+        // eslint-disable-next-line no-console
+        console.log('Locale not supported: ' + locale);
+        return;
+    }
+    if (this.loaded[locale]) {
+        return this.onDataLoaded(locale);
     }
 
-    mainPaths(locale) {
-        const basePath = 'node_modules/cldr-data/main/';
-        const result = [];
-        for (let file of mainLocaleFiles) {
-            result.push(basePath + locale + '/' + file);
-        }
-        return result;
-    }
+    const that = this;
+    let loadCount = 0;
 
-    loadDataFor(locale) {
-        if (this.localeSettings.supportedLocales.indexOf(locale) == -1) {
-            // eslint-disable-next-line no-console
-            console.log('Locale not supported: ' + locale);
-            return;
-        }
-        if (this.loaded[locale]) {
-            return this.onDataLoaded(locale);
-        }
+    const fetchHeaders = new Headers({"accept": "application/json", 'X-Requested-With': 'XMLHttpRequest'});
 
-        const that = this;
-        let loadCount = 0;
+    fetch(this.localeSettings.messages + "/" + locale + ".json", { headers: fetchHeaders }).then(response => {
+        return response.json();
+    })
+    .then(
+        json => {
+            Globalize.loadMessages(json);
+            loadCount++;
+            that.ifAllLoadedCallLoaded(loadCount, locale);
+        });
 
-        const fetchHeaders = new Headers({"accept": "application/json", 'X-Requested-With': 'XMLHttpRequest'});
-
-        fetch(this.localeSettings.messages + "/" + locale + ".json", { headers: fetchHeaders }).then(response => {
+    for (let url of that.mainPaths(locale)) {
+        fetch(url, { headers: fetchHeaders }).then(response => {
             return response.json();
         })
         .then(
             json => {
-                Globalize.loadMessages(json);
+                Globalize.load(json);
                 loadCount++;
                 that.ifAllLoadedCallLoaded(loadCount, locale);
             });
-
-        for (let url of that.mainPaths(locale)) {
-            fetch(url, { headers: fetchHeaders }).then(response => {
-                return response.json();
-            })
-            .then(
-                json => {
-                    Globalize.load(json);
-                    loadCount++;
-                    that.ifAllLoadedCallLoaded(loadCount, locale);
-                });
-        }
     }
+}
 
-    ifAllLoadedCallLoaded(loadCount, locale) {
-         if (loadCount > mainLocaleFiles.length) {
-            this.loaded[locale] = true;
-            this.onDataLoaded(locale);
-        }
+LocaleDataLoader.prototype.ifAllLoadedCallLoaded = function(loadCount, locale) {
+     if (loadCount > mainLocaleFiles.length) {
+        this.loaded[locale] = true;
+        this.onDataLoaded(locale);
     }
 }
 
