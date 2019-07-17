@@ -2,7 +2,7 @@
 
 This is a modified version of [examples/app-npm-webpack](https://github.com/globalizejs/globalize/tree/master/examples/app-npm-webpack) 
 from globalize 1.4.0 that allows the user to change the locale, then dynamically loads aditional localize converters and messages. 
-[click here to try it](https://metaclass.nl/globalize/master)
+[Click here to try it out](https://metaclass.nl/globalize/master)
 
 This version uses webpack 4. 
 It does not use [globalize-webpack-plugin](https://github.com/rxaviers/globalize-webpack-plugin) but
@@ -14,6 +14,7 @@ Dynamic loading is done by `src/globalize/LocalDataLoader.js`. You may need to a
 Other versions of this example are available that combine globalize.js with react.js and [react-widgets](https://github.com/jquense/react-widgets):
 - [for webpack 4](https://github.com/metaclass-nl/switch-language-example-globalize/tree/react-webpack4) using cldr
 - [for webpack 3](https://github.com/metaclass-nl/switch-language-example-globalize/tree/react-webpack-plugin2) using globalize-webpack-plugin 2
+
 The [version for webpack 4 using globalize-webpack-plugin 3](https://github.com/metaclass-nl/switch-language-example-globalize/tree/react-webpack-plugin3) currently does not work due to a bug in globalize-webpack-plugin
 
 ## Requirements
