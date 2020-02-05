@@ -9,6 +9,3 @@ document.getElementById( "requirements" ).style.display = "none";
 document.getElementById( "demo" ).style.display = "block";
 
 app.componentDidMount();
-
-
-
